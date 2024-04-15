@@ -1,0 +1,29 @@
+USE pandemic;
+
+CREATE TABLE IF NOT EXISTS countries  (
+id INT auto_increment PRIMARY KEY,
+code VARCHAR(8) UNIQUE,
+country VARCHAR(50) UNIQUE
+);
+
+INSERT INTO countries (code, country)
+SELECT DISTINCT code, entity FROM infectious_cases;
+
+CREATE TABLE infectious_cases_normal
+AS SELECT * FROM infectious_cases;
+
+ALTER TABLE infectious_cases_normal
+ADD id INT PRIMARY KEY AUTO_INCREMENT FIRST,
+ADD country_id INT AFTER id,
+ADD CONSTRAINT fk_country_id FOREIGN KEY (country_id) REFERENCES countries(id);
+
+SET SQL_SAFE_UPDATES = 0;
+
+UPDATE infectious_cases_normal AS infn, countries AS c  
+SET infn.country_id = c.id WHERE c.code = infn.code;
+
+SET SQL_SAFE_UPDATES = 1;
+
+ALTER TABLE infectious_cases_normal
+DROP COLUMN entity,
+DROP COLUMN code;

@@ -1,0 +1,4 @@
+USE pandemic;
+
+SELECT Year, MAKEDATE(Year, 1) as year_begin, CURDATE() as today, timestampdiff(YEAR, MAKEDATE(Year, 1), CURDATE()) as different
+FROM infectious_cases_normal;

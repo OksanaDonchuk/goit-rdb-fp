@@ -1,0 +1,16 @@
+USE pandemic;
+
+DROP FUNCTION IF EXISTS Year_diff;
+DELIMITER //
+CREATE FUNCTION Year_diff(infn_year YEAR)
+RETURNS INT
+DETERMINISTIC
+NO SQL
+BEGIN
+DECLARE result INT;
+SET result = timestampdiff(YEAR, MAKEDATE(infn_year, 1), CURDATE());
+RETURN result;
+END//
+DELIMITER ;
+
+SELECT Year, CURDATE() as today, Year_diff(Year) as diff FROM infectious_cases_normal;

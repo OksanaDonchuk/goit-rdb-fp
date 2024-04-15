@@ -1,0 +1,8 @@
+USE pandemic;
+
+SELECT country_id, AVG(Number_rabies) AS average_num, MIN(Number_rabies) AS min_num, MAX(Number_rabies) AS max_num
+FROM infectious_cases_normal
+WHERE Number_rabies IS NOT NULL AND Number_rabies <> ''
+GROUP BY country_id
+ORDER BY average_num DESC
+LIMIT 10;
